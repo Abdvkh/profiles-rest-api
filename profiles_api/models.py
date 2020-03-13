@@ -12,7 +12,7 @@ class UserProfileManager(BaseUserManager):
         if not email:
             raise ValueError('User must have an email address')
         
-        email =  self.normalize_data(email)
+        email =  self.normalize_email(email)
         user = self.model(email=email, name=name)
         
         user.set_password(password)
@@ -25,7 +25,7 @@ class UserProfileManager(BaseUserManager):
         
         user.is_superuser = True
         user.is_staff = True
-        user.save(using=self._dv)
+        user.save(using=self._db)
         
         return user
         
@@ -36,7 +36,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    is_stuff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
     objects = UserProfileManager()
     
